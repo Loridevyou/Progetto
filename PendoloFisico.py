@@ -1,86 +1,53 @@
 import pygame
 import math
-import time     #libreria per gestione del tempo
 
-pygame.init()   #serve per poter utilizzare pygame
+pygame.init()
 
-#imposto la base e l'altezza della finestra
-h = 600 #altezza finestra
-b = 700 #larghezza(base) finestra 
+# Imposta la base e l'altezza della finestra
+h = 600
+b = 700
 
-area = pygame.display.set_mode((b, h)) #creo la finestra
+area = pygame.display.set_mode((b, h))
 
-#il tipo di colore si basa sulla formattazione rgb(red, green, blu)
-red = (255, 0, 0)#scrivo 255 nella prima posizione per assegnare alla variabile red il colore rosso
+# Colori
+red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
-black = (0, 0, 0)#il nero è l'assenza di colore
+black = (0, 0, 0)
 
-r = 15 #raggio
+# Parametri del pendolo
+L = 250  # lunghezza del filo in pixel
+g = 9.81  # accelerazione di gravità in m/s^2
+theta = math.pi / 4  # angolo iniziale (45 gradi)
+omega = 0  # velocità angolare iniziale
 
-#creo punti di riferimento per le ascisse e le ordinate
-vriga = h/2
-origa = b/2
+r = 15  # raggio della sfera
+origin = (b // 2, h // 4)  # punto di fissaggio del pendolo
 
-hgiro = vriga - 6*r #posizione centrale dell'orbita circolare
+# Funzione per aggiornare la posizione del pendolo
+def update_pendulum(theta, omega, dt):
+    alpha = -(g / L) * math.sin(theta)  # accelerazione angolare
+    omega += alpha * dt  # aggiorna velocità angolare
+    theta += omega * dt  # aggiorna angolo
+    return theta, omega
 
-vel = 0.01 #guarda riga 37
+clock = pygame.time.Clock()
+running = True
+while running:
+    dt = clock.tick(60) / 1000.0  # tempo trascorso in secondi
+    theta, omega = update_pendulum(theta, omega, dt)
 
-vriga1=vriga #conservo il valore iniziale di vriga
+    # Calcola la posizione del pendolo
+    x = origin[0] + L * math.sin(theta)
+    y = origin[1] + L * math.cos(theta)
 
-count = 0
-while count < 4:
-    while vriga >= hgiro:
-        pygame.draw.circle(area, blue, (origa, vriga), r) #luogo, colore, posizione estremo1(x, y), raggio
-        pygame.draw.line(area, green, (origa, vriga), (b/2, hgiro)) #luogo, colore, posizione estremo1(x, y), posizione estremo2
-        pygame.display.update()
-        time.sleep(vel)#questo metodo interrompe il programma per i secondi indicati
-        area.fill(black)#imposto il colore del background della finestra
-        vriga = vriga - 1
-        origa = b/2 - math.sqrt((vriga1-hgiro)**2-(vriga-hgiro)**2)
-        #sono necessarie le seguenti quattro righe di codice per poter semplicemente interrompere il programma
-        events = pygame.event.get()#vengono prese tutte le azioni eseguite in input e memorizzate in questa lista
-        for event in events:
-            if event.type == pygame.QUIT:#se viene registrato un evento di chiusura forzata
-                pygame.quit() #allora viene interrotto il programma
-    origa1 = origa #conservo il valore iniziale di origa
-    while vriga != vriga1:
-        pygame.draw.circle(area, blue, (origa, vriga), r)
-        pygame.draw.line(area, green, (origa, vriga), (b/2, hgiro))
-        pygame.display.update()
-        time.sleep(vel)
-        area.fill(black)
-        vriga = vriga + 1
-        origa = origa1 + (b/2 - math.sqrt((vriga1-hgiro)**2-(vriga-hgiro)**2) - origa1)
-        events = pygame.event.get()
-        for event in events:
-            if event.type == pygame.QUIT:
-                pygame.quit()
-    while vriga >= hgiro:
-        pygame.draw.circle(area, blue, (origa, vriga), r)
-        pygame.draw.line(area, green, (origa, vriga), (b/2, hgiro))
-        pygame.display.update()
-        time.sleep(vel)
-        area.fill(black)
-        vriga = vriga - 1
-        origa = b/2 + math.sqrt((vriga1-hgiro)**2-(vriga-hgiro)**2)
-        events = pygame.event.get()
-        for event in events:
-            if event.type == pygame.QUIT:
-                pygame.quit()
-    origa2=origa
-    while vriga != vriga1:
-        pygame.draw.circle(area, blue, (origa, vriga), r)
-        pygame.draw.line(area, green, (origa, vriga), (b/2, hgiro))
-        pygame.display.update()
-        time.sleep(vel)
-        area.fill(black)
-        vriga = vriga + 1
-        origa = origa2 + (b/2 + math.sqrt((vriga1-hgiro)**2-(vriga-hgiro)**2) - origa2)
-        events = pygame.event.get()
-        for event in events:
-            if event.type == pygame.QUIT:
-                pygame.quit()
-    count = count + 1
-    print(count)
+    area.fill(black)
+    pygame.draw.line(area, green, origin, (int(x), int(y)), 2)
+    pygame.draw.circle(area, blue, (int(x), int(y)), r)
+    pygame.display.flip()
 
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+pygame.quit()
