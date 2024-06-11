@@ -1,15 +1,8 @@
 import pygame
 import math
 
-
-
-# Colori
-red = (255, 0, 0)
-green = (0, 255, 0)
-blue = (0, 0, 255)
-black = (0, 0, 0)
-
 # Parametri del pendolo
+m = 1  # massa in kg (non influente nel moto pendolare semplice senza attriti)
 L = float(input("Inserisci la lunghezza in pixel del filo: "))  # lunghezza del filo in pixel
 g = 9.81  # accelerazione di gravità in m/s^2
 theta = math.pi / 4  # angolo iniziale (45 gradi)
@@ -22,6 +15,12 @@ h = 600
 b = 700
 
 area = pygame.display.set_mode((b, h))
+
+# Colori
+red = (255, 0, 0)
+green = (0, 255, 0)
+blue = (0, 0, 255)
+black = (0, 0, 0)
 
 r = 15  # raggio della sfera
 origin = (b // 2, h // 4)  # punto di fissaggio del pendolo
