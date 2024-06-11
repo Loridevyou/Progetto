@@ -1,13 +1,7 @@
 import pygame
 import math
 
-pygame.init()
 
-# Imposta la base e l'altezza della finestra
-h = 600
-b = 700
-
-area = pygame.display.set_mode((b, h))
 
 # Colori
 red = (255, 0, 0)
@@ -16,10 +10,18 @@ blue = (0, 0, 255)
 black = (0, 0, 0)
 
 # Parametri del pendolo
-L = 250  # lunghezza del filo in pixel
+L = float(input("Inserisci la lunghezza in pixel del filo: "))  # lunghezza del filo in pixel
 g = 9.81  # accelerazione di gravità in m/s^2
 theta = math.pi / 4  # angolo iniziale (45 gradi)
 omega = 0  # velocità angolare iniziale
+
+pygame.init()
+
+# Imposta la base e l'altezza della finestra
+h = 600
+b = 700
+
+area = pygame.display.set_mode((b, h))
 
 r = 15  # raggio della sfera
 origin = (b // 2, h // 4)  # punto di fissaggio del pendolo
