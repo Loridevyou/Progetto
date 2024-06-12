@@ -23,29 +23,39 @@ blue = (0, 0, 255)
 black = (0, 0, 0)
 
 
-origin = (b // 2, h // 4)  # punto di fissaggio del pendolo
-
 # Funzione per aggiornare la posizione del pendolo
-def update_pendulum(theta, omega, dt):
+def posizione_pendolo(theta, omega, dt):
     alpha = -(G / l) * math.sin(theta)  # accelerazione angolare
     omega += alpha * dt  # aggiorna velocità angolare
     theta += omega * dt  # aggiorna angolo
     return theta, omega
 
-clock = pygame.time.Clock()
-running = True
-while running:
-    dt = clock.tick(100) / 1000.0  # tempo trascorso in secondi
-    theta, omega = update_pendulum(theta, omega, dt)
 
+# Tempo precedente
+previous_time = pygame.time.get_ticks()
+
+running = True
+count = 0
+while running:
     # Calcola la posizione del pendolo
-    x = origin[0] + l * math.sin(theta)
-    y = origin[1] + l * math.cos(theta)
+    x = b//2 + l * math.sin(theta)
+    y = h//2 + l * math.cos(theta)
+
+    # Calcola il tempo trascorso dall'ultimo frame in secondi
+    current_time = pygame.time.get_ticks()
+    delta_time = (current_time - previous_time) / 1000.0  # converti in secondi dividendo i millisecondi
+    previous_time = current_time #aggiorno il tempo di riferimento
+
+    dt = delta_time  # tempo trascorso in secondi
+    theta, omega = posizione_pendolo(theta, omega, dt)
 
     area.fill(black)
     pygame.draw.line(area, green, origin, (int(x), int(y)), 2)
     pygame.draw.circle(area, blue, (int(x), int(y)), r)
     pygame.display.flip()
+    if theta == math.pi / 4:
+        print(f"\nOscillazione: {count}")
+        count += 1
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
