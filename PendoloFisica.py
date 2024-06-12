@@ -23,8 +23,8 @@ vriga = h/2 # Posizione iniziale del pendolo rispetto all'asse verticale
 origa = b/2 # Posizione iniziale del pendolo rispetto all'asse orizzontale
 
 hgiro = vriga - 6*r #posizione centrale dell'orbita circolare (6*r è la lunghezza del filo)
-
-vel = 0.01 #impostazione di tempo di pausa tra i frame
+#impostazione di tempo di pausa tra i frame
+vel = 0.01 #(sarebbero i secondi in px al sec, quindi in questo caso è come dire: 1px/0.01sec = 100 px/1sec ->100px al secondo)
 
 vrigaConst=vriga #conservo il valore iniziale di vriga
 origaConst = origa #conservo il valore iniziale di di origa
