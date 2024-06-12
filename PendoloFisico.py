@@ -2,11 +2,11 @@ import pygame
 import math
 
 # Parametri del pendolo
-m = 1  # massa in kg (non influente nel moto pendolare semplice senza attriti)
-L = float(input("Inserisci la lunghezza in pixel del filo: "))  # lunghezza del filo in pixel
-g = 9.81  # accelerazione di gravità in m/s^2
+l = float(input("Inserisci la lunghezza in pixel del filo: "))  # lunghezza del filo in pixel
+G = 9.81  # accelerazione di gravità in m/s^2
 theta = math.pi / 4  # angolo iniziale (45 gradi)
 omega = 0  # velocità angolare iniziale
+r = float(input("Inserisci la lunghezza in pixel del raggio: "))  # raggio della sfera
 
 pygame.init()
 
@@ -22,12 +22,12 @@ green = (0, 255, 0)
 blue = (0, 0, 255)
 black = (0, 0, 0)
 
-r = 15  # raggio della sfera
+
 origin = (b // 2, h // 4)  # punto di fissaggio del pendolo
 
 # Funzione per aggiornare la posizione del pendolo
 def update_pendulum(theta, omega, dt):
-    alpha = -(g / L) * math.sin(theta)  # accelerazione angolare
+    alpha = -(G / l) * math.sin(theta)  # accelerazione angolare
     omega += alpha * dt  # aggiorna velocità angolare
     theta += omega * dt  # aggiorna angolo
     return theta, omega
@@ -35,12 +35,12 @@ def update_pendulum(theta, omega, dt):
 clock = pygame.time.Clock()
 running = True
 while running:
-    dt = clock.tick(60) / 1000.0  # tempo trascorso in secondi
+    dt = clock.tick(100) / 1000.0  # tempo trascorso in secondi
     theta, omega = update_pendulum(theta, omega, dt)
 
     # Calcola la posizione del pendolo
-    x = origin[0] + L * math.sin(theta)
-    y = origin[1] + L * math.cos(theta)
+    x = origin[0] + l * math.sin(theta)
+    y = origin[1] + l * math.cos(theta)
 
     area.fill(black)
     pygame.draw.line(area, green, origin, (int(x), int(y)), 2)
