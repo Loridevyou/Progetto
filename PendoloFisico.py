@@ -40,7 +40,7 @@ count = 0 #inizializzo il contatore di oscillazioni
 while running:
     # Calcola la posizione del pendolo
     x = b//2 + l * math.sin(theta) #Posizione della sfera rispetto all'asse delle ascisse
-    y = h//2 + l * math.cos(theta) #Posizione della sfera rispetto all'asse delle ordinate
+    y = h//4 + l * math.cos(theta) #Posizione della sfera rispetto all'asse delle ordinate
 
     now = pygame.time.get_ticks() #Calcola il tempo trascorso dall'ultimo frame in secondi
     delta_time = (now - first_time) / 1000.0  # converti in secondi dividendo i millisecondi
@@ -50,7 +50,7 @@ while running:
     theta, omega = posizione_pendolo(theta, omega, dt)
 
     area.fill(black)
-    pygame.draw.line(area, green, (b//2, h//2), (int(x), int(y)), 2)#luogo, colore, posizione estremo1(x, y), posizione estremo2
+    pygame.draw.line(area, green, (b//2, h//4), (int(x), int(y)), 2)#luogo, colore, posizione estremo1(x, y), posizione estremo2
     pygame.draw.circle(area, blue, (int(x), int(y)), r)#luogo, colore, posizione estremo1(x, y), raggio
     pygame.display.update()#aggiorno lo schermo dopo le modifiche grafiche
 
