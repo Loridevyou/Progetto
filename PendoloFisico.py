@@ -34,8 +34,8 @@ def posizione_pendolo(theta, omega, dt):
 # Tempo precedente
 previous_time = pygame.time.get_ticks()
 
-running = True
-count = 0
+running = True #flag per gestione del ciclo while
+count = 0 #inizializzo il contatore di oscillazioni
 while running:
     # Calcola la posizione del pendolo
     x = b//2 + l * math.sin(theta)
@@ -50,9 +50,10 @@ while running:
     theta, omega = posizione_pendolo(theta, omega, dt)
 
     area.fill(black)
-    pygame.draw.line(area, green, origin, (int(x), int(y)), 2)
+    pygame.draw.line(area, green, (b//2, h//2), (int(x), int(y)), 2)
     pygame.draw.circle(area, blue, (int(x), int(y)), r)
     pygame.display.flip()
+
     if theta == math.pi / 4:
         print(f"\nOscillazione: {count}")
         count += 1
