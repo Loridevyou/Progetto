@@ -3,7 +3,7 @@ import math
 
 # Parametri del pendolo
 l = float(input("Inserisci la lunghezza in pixel del filo: "))  # lunghezza del filo in pixel
-G = 9.81  # accelerazione di gravità in m/s^2
+G = 9.81  # accelerazione di gravità in m/s^2 (costante)
 theta = math.pi / 4  # angolo iniziale (45 gradi)
 omega = 0  # velocità angolare iniziale
 r = float(input("Inserisci la lunghezza in pixel del raggio: "))  # raggio della sfera
