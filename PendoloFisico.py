@@ -26,7 +26,8 @@ hgiro = vriga - 6*r #posizione centrale dell'orbita circolare
 
 vel = 0.01 #guarda riga 37
 
-vriga1=vriga #conservo il valore iniziale di vriga
+vrigaConst=vriga #conservo il valore iniziale di vriga
+origaConst = origa #conservo il valore iniziale di di origa
 
 count = 0
 while count < 4:
@@ -37,21 +38,21 @@ while count < 4:
         time.sleep(vel)#questo metodo interrompe il programma per i secondi indicati
         area.fill(black)#imposto il colore del background della finestra
         vriga = vriga - 1
-        origa = b/2 - math.sqrt((vriga1-hgiro)**2-(vriga-hgiro)**2)
+        origa = origaConst - math.sqrt((vrigaConst-hgiro)**2-(vriga-hgiro)**2)
         #sono necessarie le seguenti quattro righe di codice per poter semplicemente interrompere il programma
         events = pygame.event.get()#vengono prese tutte le azioni eseguite in input e memorizzate in questa lista
         for event in events:
             if event.type == pygame.QUIT:#se viene registrato un evento di chiusura forzata
                 pygame.quit() #allora viene interrotto il programma
     origa1 = origa #conservo il valore iniziale di origa
-    while vriga != vriga1:
+    while vriga != vrigaConst:
         pygame.draw.circle(area, blue, (origa, vriga), r)
         pygame.draw.line(area, green, (origa, vriga), (b/2, hgiro))
         pygame.display.update()
         time.sleep(vel)
         area.fill(black)
         vriga = vriga + 1
-        origa = origa1 + (b/2 - math.sqrt((vriga1-hgiro)**2-(vriga-hgiro)**2) - origa1)
+        origa = origa1 + (origaConst - math.sqrt((vrigaConst-hgiro)**2-(vriga-hgiro)**2) - origa1)
         events = pygame.event.get()
         for event in events:
             if event.type == pygame.QUIT:
@@ -63,20 +64,20 @@ while count < 4:
         time.sleep(vel)
         area.fill(black)
         vriga = vriga - 1
-        origa = b/2 + math.sqrt((vriga1-hgiro)**2-(vriga-hgiro)**2)
+        origa = origaConst + math.sqrt((vrigaConst-hgiro)**2-(vriga-hgiro)**2)
         events = pygame.event.get()
         for event in events:
             if event.type == pygame.QUIT:
                 pygame.quit()
     origa2=origa
-    while vriga != vriga1:
+    while vriga != vrigaConst:
         pygame.draw.circle(area, blue, (origa, vriga), r)
         pygame.draw.line(area, green, (origa, vriga), (b/2, hgiro))
         pygame.display.update()
         time.sleep(vel)
         area.fill(black)
         vriga = vriga + 1
-        origa = origa2 + (b/2 + math.sqrt((vriga1-hgiro)**2-(vriga-hgiro)**2) - origa2)
+        origa = origa2 + (origaConst + math.sqrt((vrigaConst-hgiro)**2-(vriga-hgiro)**2) - origa2)
         events = pygame.event.get()
         for event in events:
             if event.type == pygame.QUIT:
