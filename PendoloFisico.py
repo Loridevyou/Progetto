@@ -2,20 +2,31 @@ import pygame
 import math
 
 # Parametri del pendolo
-l = float(input("Inserisci la lunghezza in centimetri del filo: ")) #lunghezza del filo in centimetri
+while True:
+    l = float(input("Inserisci la lunghezza in centimetri del filo (tra 1 e 10): ")) #lunghezza del filo in centimetri
+    if l>10 or l<1:
+        print("Valore massimo 10, valore minimo 1")
+    else:
+        break
 l_cm = l*38 #ci sono, di media, circa 38 pixel ogni centimetro
 G = 9.81  # accelerazione di gravità in m/s^2 (costante)
 #gradi = float(input("Inserisci angolo inizale in gradi: ")) 
 radianti = math.pi / 4  #angolo iniziale tra l'asse verticale e l'asse di riferimento del pendolo nell'istante iniziale -> 45 gradi
 omega = 0  # velocità angolare iniziale
-r = float(input("Inserisci la lunghezza in centimetri del raggio della sfera: "))  #raggio della sfera
+
+while True:
+    r = float(input("Inserisci la lunghezza in centimetri del raggio della sfera(tra 0.1 e 2): "))  #raggio della sfera
+    if r>2 or r<0.1:
+        print("Valore massimo 2, valore minimo 0.1")
+    else:
+        break
 r_cm = r*38 #conversione da pixel a centimetri
 
 pygame.init()#serve per poter utilizzare pygame
 
 # Imposta la base e l'altezza della finestra
-h = 900 #altezza finestra
-b = 1200 #larghezza(base) finestra
+h = 700 #altezza finestra
+b = 1100 #larghezza(base) finestra
 
 area = pygame.display.set_mode((b, h))#creo la finestra
 
