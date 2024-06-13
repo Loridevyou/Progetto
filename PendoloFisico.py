@@ -42,9 +42,6 @@ count = 0 #inizializzo il contatore di oscillazioni
 while run:
     # Calcola la posizione del pendolo
 
-    x = b//2 + l * math.sin(theta) #Posizione della sfera rispetto all'asse delle ascisse
-    y = h//4 + l * math.cos(theta) #Posizione della sfera rispetto all'asse delle ordinate
-
     x = b//2 + l_cm * math.sin(radianti) #Posizione della sfera rispetto all'asse delle ascisse
     y = h//4 + l_cm * math.cos(radianti) #Posizione della sfera rispetto all'asse delle ordinate
 
