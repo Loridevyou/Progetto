@@ -3,6 +3,15 @@ import math
 
 pygame.init()#serve per poter utilizzare pygame
 
+
+# Funzione per aggiornare la posizione del pendolo in ogni istante, usando l'equazione di moto del pendolo semplice
+def posizione_pendolo(radianti: float, omega: float, dt: float) -> float:
+    alpha = -(G / l) * math.sin(radianti)  # accelerazione angolare -> variazione della velocità angolare nel tempo
+    omega += alpha * dt  # velocità angolare all'istante dt -> variazione dell'ampiezza angolare nel tempo
+    radianti += omega * dt  # ampiezza dell'angolo all'istante dt
+    gradi = int(radianti*57.2958) #conversione da rad a gradi
+    return radianti, omega, gradi
+
 #imposto un check di controllo per i numeri in input
 alfabeto = " qwertyuiopè+asdfghjklò''àù<zxcvbnm,.-\|!£$%&/()=?^"
 
@@ -38,7 +47,7 @@ while controlA == 1:
 l_cm = l*38 #ci sono, di media, circa 38 pixel ogni centimetro
 
 controlB = 1
-while controlB:
+while controlB == 1:
     sr = str(input("Inserisci la lunghezza in centimetri del raggio della sfera(tra 0.1 e 2): "))  #raggio della sfera
     verificaR = no_char(sr)
     if verificaR == True:
@@ -73,13 +82,6 @@ white = (255,255,255)#il bianco è la somma di tutti i colori
 #ho usato questi colori perchè erano i più semplici da impostare ma è possibile scegliere tra le varie combinazioni
 
 
-# Funzione per aggiornare la posizione del pendolo in ogni istante, usando l'equazione di moto del pendolo semplice
-def posizione_pendolo(radianti: float, omega: float, dt: float) -> float:
-    alpha = -(G / l) * math.sin(radianti)  # accelerazione angolare -> variazione della velocità angolare nel tempo
-    omega += alpha * dt  # velocità angolare all'istante dt -> variazione dell'ampiezza angolare nel tempo
-    radianti += omega * dt  # ampiezza dell'angolo all'istante dt
-    gradi = int(radianti*57.2958) #conversione da rad a gradi
-    return radianti, omega, gradi
 
 #periodo -> tempo impiegato a compiere un oscillazione completa
 periodo = round(2*math.pi*math.sqrt(l/G), 2)
@@ -94,11 +96,10 @@ first_time = pygame.time.get_ticks()
 count = 0 #inizializzo il contatore di oscillazioni
 last_direction = 1  # 1 per destra, -1 per sinistra
 
-#interrompo il codice dopo 8 oscillazioni
-while count <= 8:
+#interrompo il codice dopo 10 oscillazioni
+while count <= 10:
 
     # Calcola la posizione del pendolo
-
     x = b//2 + l_cm * math.sin(radianti) #Posizione della sfera rispetto all'asse delle ascisse
     y = h//4 + l_cm * math.cos(radianti) #Posizione della sfera rispetto all'asse delle ordinate
 
@@ -118,7 +119,7 @@ while count <= 8:
     testoA=stile.render(outputA, True, white)
     #stamperà a schermo il valore assoluto della velocità angolare ad ogni istante
     o = math.copysign(omega, 1)
-    outputV = "Velocità angolare: " + str(round(o, 1)) + "rad/sec"
+    outputV = "Velocità angolare(val_abs): " + str(round(o, 1)) + "rad/sec"
     testoV=stile.render(outputV, True, white)
     #stamperà a schermo il numero di oscillazioni
     outputOs = "Numero oscillazioni: " + str(count)
@@ -144,9 +145,6 @@ while count <= 8:
 
     # Controlla se il pendolo ha attraversato la posizione iniziale (angolo zero) con cambio di direzione
     if last_direction > 0 and radianti < 0:
-        count += 1
-        print(f"\nOscillazione: {count}")
-    elif last_direction < 0 and radianti > 0:
         count += 1
         print(f"\nOscillazione: {count}")
 
