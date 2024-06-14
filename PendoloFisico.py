@@ -130,7 +130,7 @@ while count <= 8:
     outputOs = "Numero oscillazioni: " + str(count)
     testoOs=stile.render(outputOs, True, white)
     #stampa a schermo il valore del periodo
-    outputP = "Periodo: " + str(periodo) + "secondi"
+    outputP = "Periodo(T): " + str(periodo) + "secondi"
     testoP=stile.render(outputP, True, white)
 
     area.fill(black)
