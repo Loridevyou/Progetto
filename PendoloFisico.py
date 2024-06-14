@@ -10,7 +10,8 @@ def posizione_pendolo(radianti: float, omega: float, dt: float) -> float:
     omega += alpha * dt  # velocità angolare all'istante dt -> variazione dell'ampiezza angolare nel tempo
     radianti += omega * dt  # ampiezza dell'angolo all'istante dt
     gradi = int(radianti*57.2958) #conversione da rad a gradi
-    return radianti, omega, gradi
+    altezza = l*(1 - math.cos(radianti))
+    return radianti, omega, gradi, altezza
 
 #imposto un check di controllo per i numeri in input
 alfabeto = " qwertyuiopè+asdfghjklò''àù<zxcvbnm,.-\|!£$%&/()=?^"
@@ -109,8 +110,10 @@ while count <= 10:
     first_time = now #aggiorno il tempo di riferimento
 
     dt = delta_time  # tempo trascorso in secondi
-    radianti, omega, gradi = posizione_pendolo(radianti, omega, dt)
-    
+    radianti, omega, gradi, altezza = posizione_pendolo(radianti, omega, dt)
+    En_pot = round(G*altezza, 1) #m*g*h ,ma consideriamo una massa pari a 1 pero ora
+
+
     #stamperà a schermo L'ampiezza iniziale
     outputAmax = "Ampiezza di partenza : " + str(gradi_start) + "°"
     testoAmax=stile.render(outputAmax, True, white)
@@ -127,6 +130,9 @@ while count <= 10:
     #stampa a schermo il valore del periodo
     outputP = "Periodo(T): " + str(periodo) + "secondi"
     testoP=stile.render(outputP, True, white)
+    #stampa a schermo l'energia potenziale
+    outputEP = "Energia potenziale: " + str(En_pot) + " J"
+    testoEP=stile.render(outputEP, True, white)
 
     area.fill(black)
     pygame.draw.line(area, grey, (b//2, h//4), (b//2, h//4 + l_cm - r_cm))#asse delle ordinate
@@ -140,6 +146,7 @@ while count <= 10:
     area.blit(testoV, (b/10, h/10 + 20)) #sposto questa scritta di 20 pixel sotto l'altra
     area.blit(testoP, (b/10,h/10 + 40))#sposto questa scritta di 40 pixel sotto l'altra
     area.blit(testoOs, (b/1.5,h/10))#blitto le oscillazioni in alto a destra
+    area.blit(testoEP, (b/1.5,h/10 + 20))#blitto energia potenziale in alto a destra
     
     pygame.display.update()#aggiorno lo schermo dopo le modifiche grafiche
 
