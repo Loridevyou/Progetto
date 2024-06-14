@@ -6,23 +6,27 @@ pygame.init()#serve per poter utilizzare pygame
 #imposto un check di controllo per i numeri in input
 alfabeto = " qwertyuiopè+asdfghjklò''àù<zxcvbnm,.-\|!£$%&/()=?^"
 
+#funzione che aiuta a riconoscere se in input è stato inserito un carattere appartenente alla stringa alfabeto
+def no_char(s: str) -> bool:
+    verifica = True
+    for lettera in alfabeto:
+        if s == lettera:
+            print("Hai inserito un carattere")
+            verifica = False
+        elif s == "\n" or s == "":
+            print("Hai inserito un carattere")
+            verifica = False
+            break
+    return verifica
+
+
 # Parametri del pendolo
 controlA = 1
 while controlA == 1:
     sl = str(input("Inserisci la lunghezza in centimetri del filo (tra 1 e 10): ")) #lunghezza del filo in centimetri
-    verificaS = True
-    for lettera in alfabeto:
-        if sl == lettera:
-            print("Hai inserito un carattere")
-            verificaS = False
-        elif sl == "\n" or sl == "":
-            print("Hai inserito un carattere")
-            verificaS = False
-            break
-        else:
-            continue
+    verificaS = no_char(sl)
     if verificaS == True:
-        l = float(sl)
+        l = float(sl) # Trasformo la lunghezza inserita da stringa a valore reale utilizzabile per le formule
         if l>10 or l<1:
             print("Valore massimo 10, valore minimo 1")
             controlA = 1
@@ -36,17 +40,7 @@ l_cm = l*38 #ci sono, di media, circa 38 pixel ogni centimetro
 controlB = 1
 while controlB:
     sr = str(input("Inserisci la lunghezza in centimetri del raggio della sfera(tra 0.1 e 2): "))  #raggio della sfera
-    verificaR = True
-    for lettera in alfabeto:
-        if sr == lettera:
-            print("Hai inserito un carattere")
-            verificaR = False
-        elif sr == "\n" or sr == "":
-            print("Hai inserito un carattere")
-            verificaR = False
-            break
-        else:
-            continue
+    verificaR = no_char(sr)
     if verificaR == True:
         r = float(sr)
         if r>2 or r<0.1:
@@ -80,7 +74,7 @@ white = (255,255,255)#il bianco è la somma di tutti i colori
 
 
 # Funzione per aggiornare la posizione del pendolo in ogni istante, usando l'equazione di moto del pendolo semplice
-def posizione_pendolo(radianti, omega, dt):
+def posizione_pendolo(radianti: float, omega: float, dt: float) -> float:
     alpha = -(G / l) * math.sin(radianti)  # accelerazione angolare -> variazione della velocità angolare nel tempo
     omega += alpha * dt  # velocità angolare all'istante dt -> variazione dell'ampiezza angolare nel tempo
     radianti += omega * dt  # ampiezza dell'angolo all'istante dt
