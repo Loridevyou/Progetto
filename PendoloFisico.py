@@ -42,12 +42,24 @@ while controlB == 1:
             controlB = 0
     except ValueError:
             print("Hai inserito un carattere non numerico")
+
+print(f"La lunghezza del raggio è {r} cm")
 r_cm = r*38 #conversione da pixel a centimetri
 
 G = 9.81  # accelerazione di gravità terrestre in m/s^2 (costante)
 radianti = math.pi / 4  #angolo iniziale tra l'asse verticale e l'asse di riferimento del pendolo nell'istante iniziale -> 45 gradi
 gradi_start = int(radianti*57.2958) #conversione da rad a gradi
 omega = 0  # velocità angolare iniziale
+
+#l'utente sceglie quante oscillazioni vedere prima di interrompere il programma
+while True:
+    volonta = input("Inserisci quante oscillazioni vedere: ")  # lunghezza del filo in centimetri
+    
+    try:
+        volonta = float(volonta)  # Prova a convertire l'input in un numero float
+        break
+    except ValueError:
+        print("Hai inserito un carattere non numerico")
 
 # Imposta la base e l'altezza della finestra
 h = 700 #altezza finestra
@@ -61,8 +73,7 @@ blue = (0, 0, 255) # Colore blu
 grey = (128, 128, 128)  # Colore grigio
 black = (0, 0, 0)#il nero è l'assenza di colore
 white = (255,255,255)#il bianco è la somma di tutti i colori
-#ho usato questi colori perchè erano i più semplici da impostare ma è possibile scegliere tra le varie combinazioni
-
+#ho usato questi colori perchè erano i più semplici da impostare ma è possibile scegliere tra le varie combinazioni(255^3)
 
 
 #periodo -> tempo impiegato a compiere un oscillazione completa
@@ -79,7 +90,7 @@ count = 0 #inizializzo il contatore di oscillazioni
 last_direction = 1  # 1 per destra, -1 per sinistra
 
 #interrompo il codice dopo 10 oscillazioni
-while count <= 10:
+while count <= volonta:
 
     # Calcola la posizione del pendolo
     x = b//2 + l_cm * math.sin(radianti) #Posizione della sfera rispetto all'asse delle ascisse
