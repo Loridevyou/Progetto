@@ -11,11 +11,6 @@ while True:
     else:
         break
 l_cm = l*38 #ci sono, di media, circa 38 pixel ogni centimetro
-G = 9.81  # accelerazione di gravità in m/s^2 (costante)
-
-radianti = math.pi / 4  #angolo iniziale tra l'asse verticale e l'asse di riferimento del pendolo nell'istante iniziale -> 45 gradi
-gradi = int(radianti*57.2958) #conversione da rad a gradi
-omega = 0  # velocità angolare iniziale
 
 while True:
     r = float(input("Inserisci la lunghezza in centimetri del raggio della sfera(tra 0.1 e 2): "))  #raggio della sfera
@@ -25,11 +20,14 @@ while True:
         break
 r_cm = r*38 #conversione da pixel a centimetri
 
+G = 9.81  # accelerazione di gravità in m/s^2 (costante)
+radianti = math.pi / 4  #angolo iniziale tra l'asse verticale e l'asse di riferimento del pendolo nell'istante iniziale -> 45 gradi
+gradi_start = int(radianti*57.2958) #conversione da rad a gradi
+omega = 0  # velocità angolare iniziale
 
 # Imposta la base e l'altezza della finestra
 h = 700 #altezza finestra
 b = 1100 #larghezza(base) finestra
-
 area = pygame.display.set_mode((b, h))#creo la finestra
 
 #Il tipo di colore si basa sulla formattazione rgb(red, green, blu)
@@ -52,7 +50,7 @@ def posizione_pendolo(radianti, omega, dt):
 
 
 #Inizio a generare delle stampe a schermo dei dati da visualizzare
-#font della scritta 
+#font e dimensione della scritta 
 stile=pygame.font.Font('freesansbold.ttf',16)
 
 # Tempo iniziale
@@ -62,7 +60,7 @@ count = 0 #inizializzo il contatore di oscillazioni
 last_direction = 1  # 1 per destra, -1 per sinistra
 
 #interrompo il codice dopo 8 oscillazioni
-while count < 8:
+while count <= 8:
 
     # Calcola la posizione del pendolo
 
@@ -76,13 +74,19 @@ while count < 8:
 
     dt = delta_time  # tempo trascorso in secondi
     radianti, omega, gradi = posizione_pendolo(radianti, omega, dt)
-
+    
+    #stamperà a schermo L'ampiezza iniziale
+    outputAmax = "Ampiezza di partenza : " + str(gradi_start) + "°"
+    testoAmax=stile.render(outputAmax, True, white)
     #genero una stringa che stamperà a schermo l'ampiezza del pendolo (la max è corrispondente a quella iniziale non essendoci attriti)
     outputA = "Ampiezza : " + str(gradi) + "°"
     testoA=stile.render(outputA, True, white)
-    #stampera a schermo la velocità angolare ad ogni istante
+    #stamperà a schermo la velocità angolare ad ogni istante
     outputV = "Velocità angolare: " + str(round(omega, 1)) + "rad/sec"
     testoV=stile.render(outputV, True, white)
+    #stamperà a schermo il numero di oscillazioni
+    outputOs = "Numero oscillazioni: " + str(count)
+    testoOs=stile.render(outputOs, True, white)
 
     area.fill(black)
     pygame.draw.line(area, grey, (b//2, h//4), (b//2, h//4 + l_cm - r_cm))#asse delle ordinate
@@ -93,8 +97,10 @@ while count < 8:
     pygame.draw.circle(area, blue, (int(x), int(y)), r_cm)#luogo, colore, posizione estremo1(x, y), raggio in cm
     
     #blitto il testo sullo schermo prima di aggiornarlo
-    area.blit(testoA, (b/10,h/10))#blitto l'ampiezza max
+    area.blit(testoAmax, (b/10, h/10 - 20))#blitto l'ampiezza max
+    area.blit(testoA, (b/10, h/10))#blitto l'ampiezza aggiornata ad ogni istante
     area.blit(testoV, (b/10, h/10 + 20)) #sposto questa scritta di 15 pixel sotto l'altra
+    area.blit(testoOs, (b/1.5,h/10))#blitto le oscillazioni in alto a destra
     
     pygame.display.update()#aggiorno lo schermo dopo le modifiche grafiche
 
