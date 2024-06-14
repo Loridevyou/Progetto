@@ -3,21 +3,59 @@ import math
 
 pygame.init()#serve per poter utilizzare pygame
 
+alfabeto = " qwertyuiopè+asdfghjklò''àù<zxcvbnm,.-\|!£$%&/()=?^"
+
 # Parametri del pendolo
-while True:
-    l = float(input("Inserisci la lunghezza in centimetri del filo (tra 1 e 10): ")) #lunghezza del filo in centimetri
-    if l>10 or l<1:
-        print("Valore massimo 10, valore minimo 1")
-    else:
-        break
+controlA = 1
+while controlA == 1:
+    sl = str(input("Inserisci la lunghezza in centimetri del filo (tra 1 e 10): ")) #lunghezza del filo in centimetri
+    verificaS = True
+    for lettera in alfabeto:
+        if sl == lettera:
+            print("Hai inserito un carattere")
+            verificaS = False
+        elif sl == "\n" or sl == "":
+            print("Hai inserito un carattere")
+            verificaS = False
+            break
+        else:
+            continue
+    if verificaS == True:
+        l = float(sl)
+        if l>10 or l<1:
+            print("Valore massimo 10, valore minimo 1")
+            controlA = 1
+        else:
+            controlA = 0
+            break
+        if controlA == 0:
+            break
 l_cm = l*38 #ci sono, di media, circa 38 pixel ogni centimetro
 
-while True:
-    r = float(input("Inserisci la lunghezza in centimetri del raggio della sfera(tra 0.1 e 2): "))  #raggio della sfera
-    if r>2 or r<0.1:
-        print("Valore massimo 2, valore minimo 0.1")
-    else:
-        break
+controlB = 1
+while controlB:
+    sr = str(input("Inserisci la lunghezza in centimetri del raggio della sfera(tra 0.1 e 2): "))  #raggio della sfera
+    verificaR = True
+    for lettera in alfabeto:
+        if sr == lettera:
+            print("Hai inserito un carattere")
+            verificaR = False
+        elif sr == "\n" or sr == "":
+            print("Hai inserito un carattere")
+            verificaR = False
+            break
+        else:
+            continue
+    if verificaR == True:
+        r = float(sr)
+        if r>2 or r<0.1:
+            print("Valore massimo 2, valore minimo 0.1")
+            controlB = 1
+        else:
+            controlB = 0
+            break
+        if controlB == 0:
+            break
 r_cm = r*38 #conversione da pixel a centimetri
 
 G = 9.81  # accelerazione di gravità in m/s^2 (costante)
@@ -79,10 +117,11 @@ while count <= 8:
     outputAmax = "Ampiezza di partenza : " + str(gradi_start) + "°"
     testoAmax=stile.render(outputAmax, True, white)
     #genero una stringa che stamperà a schermo l'ampiezza del pendolo (la max è corrispondente a quella iniziale non essendoci attriti)
-    outputA = "Ampiezza : " + str(gradi) + "°"
+    outputA = "Ampiezza alpha: " + str(gradi) + "°"
     testoA=stile.render(outputA, True, white)
-    #stamperà a schermo la velocità angolare ad ogni istante
-    outputV = "Velocità angolare: " + str(round(omega, 1)) + "rad/sec"
+    #stamperà a schermo il valore assoluto della velocità angolare ad ogni istante
+    o = math.copysign(omega, 1)
+    outputV = "Velocità angolare: " + str(round(o, 1)) + "rad/sec"
     testoV=stile.render(outputV, True, white)
     #stamperà a schermo il numero di oscillazioni
     outputOs = "Numero oscillazioni: " + str(count)
