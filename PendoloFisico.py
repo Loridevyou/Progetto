@@ -13,54 +13,35 @@ def posizione_pendolo(radianti: float, omega: float, dt: float) -> float:
     altezza = l*(1 - math.cos(radianti))
     return radianti, omega, gradi, altezza
 
-#imposto un check di controllo per i numeri in input
-alfabeto = " qwertyuiopè+asdfghjklò''àù<zxcvbnm,.-\|!£$%&/()=?^"
-
-#funzione che aiuta a riconoscere se in input è stato inserito un carattere appartenente alla stringa alfabeto
-def no_char(s: str) -> bool:
-    verifica = True
-    for lettera in alfabeto:
-        if s == lettera:
-            print("Hai inserito un carattere")
-            verifica = False
-        elif s == "\n" or s == "":
-            print("Hai inserito un carattere")
-            verifica = False
-            break
-    return verifica
-
-
 # Parametri del pendolo
 controlA = 1
 while controlA == 1:
-    sl = str(input("Inserisci la lunghezza in centimetri del filo (tra 1 e 10): ")) #lunghezza del filo in centimetri
-    verificaS = no_char(sl)
-    if verificaS == True:
-        l = float(sl) # Trasformo la lunghezza inserita da stringa a valore reale utilizzabile per le formule
-        if l>10 or l<1:
+    sl = input("Inserisci la lunghezza in centimetri del filo (tra 1 e 10): ")  # lunghezza del filo in centimetri
+    
+    try:
+        l = float(sl)  # Prova a convertire l'input in un numero float
+        if l > 10 or l < 1:
             print("Valore massimo 10, valore minimo 1")
-            controlA = 1
         else:
             controlA = 0
-            break
-        if controlA == 0:
-            break
+    except ValueError:
+        print("Hai inserito un carattere non numerico")
+
+print(f"La lunghezza del filo è {l} cm")
 l_cm = l*38 #ci sono, di media, circa 38 pixel ogni centimetro
 
 controlB = 1
 while controlB == 1:
     sr = str(input("Inserisci la lunghezza in centimetri del raggio della sfera(tra 0.1 e 2): "))  #raggio della sfera
-    verificaR = no_char(sr)
-    if verificaR == True:
+    
+    try:
         r = float(sr)
-        if r>2 or r<0.1:
+        if r > 2 or r < 0.1:
             print("Valore massimo 2, valore minimo 0.1")
-            controlB = 1
         else:
             controlB = 0
-            break
-        if controlB == 0:
-            break
+    except ValueError:
+            print("Hai inserito un carattere non numerico")
 r_cm = r*38 #conversione da pixel a centimetri
 
 G = 9.81  # accelerazione di gravità terrestre in m/s^2 (costante)
