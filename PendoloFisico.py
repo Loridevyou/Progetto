@@ -3,6 +3,7 @@ import math
 
 pygame.init()#serve per poter utilizzare pygame
 
+#imposto un check di controllo per i numeri in input
 alfabeto = " qwertyuiopè+asdfghjklò''àù<zxcvbnm,.-\|!£$%&/()=?^"
 
 # Parametri del pendolo
@@ -58,7 +59,7 @@ while controlB:
             break
 r_cm = r*38 #conversione da pixel a centimetri
 
-G = 9.81  # accelerazione di gravità in m/s^2 (costante)
+G = 9.81  # accelerazione di gravità terrestre in m/s^2 (costante)
 radianti = math.pi / 4  #angolo iniziale tra l'asse verticale e l'asse di riferimento del pendolo nell'istante iniziale -> 45 gradi
 gradi_start = int(radianti*57.2958) #conversione da rad a gradi
 omega = 0  # velocità angolare iniziale
@@ -70,8 +71,8 @@ area = pygame.display.set_mode((b, h))#creo la finestra
 
 #Il tipo di colore si basa sulla formattazione rgb(red, green, blu)
 red = (255, 0, 0)#scrivo 255 nella prima posizione, ad esempio, per assegnare alla variabile red il colore rosso
-green = (0, 255, 0)
-blue = (0, 0, 255)
+green = (0, 255, 0) # Colore verde
+blue = (0, 0, 255) # Colore blu
 grey = (128, 128, 128)  # Colore grigio
 black = (0, 0, 0)#il nero è l'assenza di colore
 white = (255,255,255)#il bianco è la somma di tutti i colori
@@ -86,6 +87,8 @@ def posizione_pendolo(radianti, omega, dt):
     gradi = int(radianti*57.2958) #conversione da rad a gradi
     return radianti, omega, gradi
 
+#periodo -> tempo impiegato a compiere un oscillazione completa
+periodo = round(2*math.pi*math.sqrt(l/G), 2)
 
 #Inizio a generare delle stampe a schermo dei dati da visualizzare
 #font e dimensione della scritta 
@@ -126,19 +129,21 @@ while count <= 8:
     #stamperà a schermo il numero di oscillazioni
     outputOs = "Numero oscillazioni: " + str(count)
     testoOs=stile.render(outputOs, True, white)
+    #stampa a schermo il valore del periodo
+    outputP = "Periodo: " + str(periodo) + "secondi"
+    testoP=stile.render(outputP, True, white)
 
     area.fill(black)
     pygame.draw.line(area, grey, (b//2, h//4), (b//2, h//4 + l_cm - r_cm))#asse delle ordinate
     pygame.draw.line(area, green, (b//2, h//4), (int(x), int(y)), 2)#luogo, colore, posizione estremo fisso, posizione estremo mobile
-
-    pygame.draw.circle(area, blue, (int(x), int(y)), r)#luogo, colore, posizione estremo1(x, y), raggio
 
     pygame.draw.circle(area, blue, (int(x), int(y)), r_cm)#luogo, colore, posizione estremo1(x, y), raggio in cm
     
     #blitto il testo sullo schermo prima di aggiornarlo
     area.blit(testoAmax, (b/10, h/10 - 20))#blitto l'ampiezza max
     area.blit(testoA, (b/10, h/10))#blitto l'ampiezza aggiornata ad ogni istante
-    area.blit(testoV, (b/10, h/10 + 20)) #sposto questa scritta di 15 pixel sotto l'altra
+    area.blit(testoV, (b/10, h/10 + 20)) #sposto questa scritta di 20 pixel sotto l'altra
+    area.blit(testoP, (b/10,h/10 + 40))#sposto questa scritta di 40 pixel sotto l'altra
     area.blit(testoOs, (b/1.5,h/10))#blitto le oscillazioni in alto a destra
     
     pygame.display.update()#aggiorno lo schermo dopo le modifiche grafiche
