@@ -47,23 +47,22 @@ def posizione_pendolo(radianti, omega, dt):
     alpha = -(G / l) * math.sin(radianti)  # accelerazione angolare -> variazione della velocità angolare nel tempo
     omega += alpha * dt  # velocità angolare all'istante dt -> variazione dell'ampiezza angolare nel tempo
     radianti += omega * dt  # ampiezza dell'angolo all'istante dt
-    return radianti, omega
+    gradi = int(radianti*57.2958) #conversione da rad a gradi
+    return radianti, omega, gradi
 
 
 #Inizio a generare delle stampe a schermo dei dati da visualizzare
 #font della scritta 
 stile=pygame.font.Font('freesansbold.ttf',16)
-#genero una stringa che stamperà a schermo l'ampiezza massima del pendolo (corrispondente a quella iniziale non essendoci attriti)
-outputA = "Ampiezza massima: " + str(gradi) + "°"
-testoA=stile.render(outputA, True, white)
-
 
 # Tempo iniziale
 first_time = pygame.time.get_ticks()
 
-run = True #flag per gestione del ciclo while
 count = 0 #inizializzo il contatore di oscillazioni
-while run:
+last_direction = 1  # 1 per destra, -1 per sinistra
+
+#interrompo il codice dopo 8 oscillazioni
+while count < 8:
 
     # Calcola la posizione del pendolo
 
@@ -76,14 +75,17 @@ while run:
     first_time = now #aggiorno il tempo di riferimento
 
     dt = delta_time  # tempo trascorso in secondi
-    radianti, omega = posizione_pendolo(radianti, omega, dt)
+    radianti, omega, gradi = posizione_pendolo(radianti, omega, dt)
 
+    #genero una stringa che stamperà a schermo l'ampiezza del pendolo (la max è corrispondente a quella iniziale non essendoci attriti)
+    outputA = "Ampiezza : " + str(gradi) + "°"
+    testoA=stile.render(outputA, True, white)
     #stampera a schermo la velocità angolare ad ogni istante
     outputV = "Velocità angolare: " + str(round(omega, 1)) + "rad/sec"
     testoV=stile.render(outputV, True, white)
 
     area.fill(black)
-    pygame.draw.line(area, grey, (b//2, h//4), (b//2, h//4 + l_cm - r_cm))
+    pygame.draw.line(area, grey, (b//2, h//4), (b//2, h//4 + l_cm - r_cm))#asse delle ordinate
     pygame.draw.line(area, green, (b//2, h//4), (int(x), int(y)), 2)#luogo, colore, posizione estremo fisso, posizione estremo mobile
 
     pygame.draw.circle(area, blue, (int(x), int(y)), r)#luogo, colore, posizione estremo1(x, y), raggio
@@ -93,18 +95,25 @@ while run:
     #blitto il testo sullo schermo prima di aggiornarlo
     area.blit(testoA, (b/10,h/10))#blitto l'ampiezza max
     area.blit(testoV, (b/10, h/10 + 20)) #sposto questa scritta di 15 pixel sotto l'altra
-
+    
     pygame.display.update()#aggiorno lo schermo dopo le modifiche grafiche
 
-    #Tengo il conto del numero di oscillazioni
-    if radianti == math.pi / 4:
+    # Controlla se il pendolo ha attraversato la posizione iniziale (angolo zero) con cambio di direzione
+    if last_direction > 0 and radianti < 0:
+        count += 1
         print(f"\nOscillazione: {count}")
-        count += 1 #incremento il contatore ogni volta che l'angolo torna ad essere 45°
+    elif last_direction < 0 and radianti > 0:
+        count += 1
+        print(f"\nOscillazione: {count}")
+
+    # Aggiorna la direzione
+    last_direction = 1 if radianti > 0 else -1
+    
 
     #Sono necessarie le seguenti quattro righe di codice per poter semplicemente interrompere il programma
     events = pygame.event.get()#vengono prese tutte le azioni eseguite in input e memorizzate in questa lista
     for event in events:
         if event.type == pygame.QUIT:#se viene registrato un evento di chiusura forzata
-            run = False #allora viene interrotto il programma
+            pygame.quit() #allora viene interrotto il programma
 
-pygame.quit()
+
