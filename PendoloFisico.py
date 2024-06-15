@@ -30,16 +30,17 @@ l_cm = l*38 #ci sono, di media, circa 38 pixel ogni centimetro
 r = get_input("Inserisci la lunghezza in centimetri del raggio della sfera(tra 0.1 e 2): ", 0.1, 2)  #raggio della sfera
 r_cm = r*38 #conversione da pixel a centimetri
 
+massa = get_input("Inserisci la massa della sfera: ", 0.01, 100)
 G = 9.81  # accelerazione di gravità terrestre in m/s^2 (costante)
-radianti = math.pi / 4  #angolo iniziale tra l'asse verticale e l'asse di riferimento del pendolo nell'istante iniziale -> 45 gradi
-gradi_start = int(radianti*57.2958) #conversione da rad a gradi
+gradi_start = get_input("Inserisci l'ampiezza angolare iniziale in gradi (tra 1 e 179): ", 1, 179)
+radianti = math.radians(gradi_start)  # Conversione da gradi a radianti
 omega = 0  # velocità angolare iniziale
 
 #l'utente sceglie quante oscillazioni vedere prima di interrompere il programma
 while True:
-    volonta = input("Inserisci quante oscillazioni vedere: ")  # lunghezza del filo in centimetri
     try:
-        volonta = float(volonta)  # Prova a convertire l'input in un numero float
+        volonta = input("Inserisci quante oscillazioni vedere: ")  # lunghezza del filo in centimetri
+        volonta = int(volonta)  # Prova a convertire l'input in un numero intero
         break
     except ValueError:
         print("Hai inserito un carattere non numerico")
@@ -86,7 +87,7 @@ while count <= volonta:
 
     dt = delta_time  # tempo trascorso in secondi
     radianti, omega, gradi, altezza = posizione_pendolo(radianti, omega, dt)
-    En_pot = round(G*altezza, 1) #m*g*h ,ma consideriamo una massa pari a 1 pero ora
+    En_pot = round(massa*G*altezza, 1) #m*g*h ,energia potenziale
 
 
     #stamperà a schermo L'ampiezza iniziale
@@ -96,7 +97,7 @@ while count <= volonta:
     outputA = "Ampiezza alpha: " + str(gradi) + "°"
     testoA=stile.render(outputA, True, white)
     #stamperà a schermo il valore assoluto della velocità angolare ad ogni istante
-    o = math.copysign(omega, 1)
+    o = math.copysign(omega, 1)#valore assoluto
     outputV = "Velocità angolare(val_abs): " + str(round(o, 1)) + "rad/sec"
     testoV=stile.render(outputV, True, white)
     #stamperà a schermo il numero di oscillazioni
