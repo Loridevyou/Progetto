@@ -3,7 +3,6 @@ import math
 
 pygame.init()#serve per poter utilizzare pygame
 
-
 # Funzione per aggiornare la posizione del pendolo in ogni istante, usando l'equazione di moto del pendolo semplice
 def posizione_pendolo(radianti: float, omega: float, dt: float) -> float:
     alpha = -(G / l) * math.sin(radianti)  # accelerazione angolare -> variazione della velocità angolare nel tempo
@@ -12,38 +11,23 @@ def posizione_pendolo(radianti: float, omega: float, dt: float) -> float:
     gradi = int(radianti*57.2958) #conversione da rad a gradi
     altezza = l*(1 - math.cos(radianti))
     return radianti, omega, gradi, altezza
-
-# Parametri del pendolo
-controlA = 1
-while controlA == 1:
-    sl = input("Inserisci la lunghezza in centimetri del filo (tra 1 e 10): ")  # lunghezza del filo in centimetri
-    
-    try:
-        l = float(sl)  # Prova a convertire l'input in un numero float
-        if l > 10 or l < 1:
-            print("Valore massimo 10, valore minimo 1")
-        else:
-            controlA = 0
-    except ValueError:
-        print("Hai inserito un carattere non numerico")
-
-print(f"La lunghezza del filo è {l} cm")
-l_cm = l*38 #ci sono, di media, circa 38 pixel ogni centimetro
-
-controlB = 1
-while controlB == 1:
-    sr = str(input("Inserisci la lunghezza in centimetri del raggio della sfera(tra 0.1 e 2): "))  #raggio della sfera
-    
-    try:
-        r = float(sr)
-        if r > 2 or r < 0.1:
-            print("Valore massimo 2, valore minimo 0.1")
-        else:
-            controlB = 0
-    except ValueError:
+# Funzione per prendere in input valori float senza accettare caratteri o valori fuori dal range
+def get_input(prompt: str, min_value: float, max_value: float) -> float:
+    while True:
+        try:
+            value = float(input(prompt))
+            if min_value <= value <= max_value:
+                return value
+            else:
+                print(f"Valore deve essere tra {min_value} e {max_value}")
+        except ValueError:
             print("Hai inserito un carattere non numerico")
 
-print(f"La lunghezza del raggio è {r} cm")
+# Parametri del pendolo
+l = get_input("Inserisci la lunghezza in centimetri del filo (tra 1 e 10): ", 1, 10)  # lunghezza del filo in centimetri 
+l_cm = l*38 #ci sono, di media, circa 38 pixel ogni centimetro
+
+r = get_input("Inserisci la lunghezza in centimetri del raggio della sfera(tra 0.1 e 2): ", 0.1, 2)  #raggio della sfera
 r_cm = r*38 #conversione da pixel a centimetri
 
 G = 9.81  # accelerazione di gravità terrestre in m/s^2 (costante)
@@ -54,7 +38,6 @@ omega = 0  # velocità angolare iniziale
 #l'utente sceglie quante oscillazioni vedere prima di interrompere il programma
 while True:
     volonta = input("Inserisci quante oscillazioni vedere: ")  # lunghezza del filo in centimetri
-    
     try:
         volonta = float(volonta)  # Prova a convertire l'input in un numero float
         break
@@ -108,7 +91,7 @@ while count <= volonta:
 
     #stamperà a schermo L'ampiezza iniziale
     outputAmax = "Ampiezza di partenza : " + str(gradi_start) + "°"
-    testoAmax=stile.render(outputAmax, True, white)
+    testoAmax = stile.render(outputAmax, True, white)
     #genero una stringa che stamperà a schermo l'ampiezza del pendolo (la max è corrispondente a quella iniziale non essendoci attriti)
     outputA = "Ampiezza alpha: " + str(gradi) + "°"
     testoA=stile.render(outputA, True, white)
