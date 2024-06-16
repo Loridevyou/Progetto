@@ -3,13 +3,15 @@ import math
 
 pygame.init()#serve per poter utilizzare pygame
 
-# Funzione per aggiornare la posizione del pendolo in ogni istante, usando l'equazione di moto del pendolo semplice
+
+# Funzione per aggiornare la posizione del pendolo in ogni istante(dt), usando l'equazione di moto del pendolo semplice
 def posizione_pendolo(radianti: float, omega: float, dt: float) -> float:
-    alpha = -(G / l) * math.sin(radianti)  # accelerazione angolare -> variazione della velocità angolare nel tempo
+    global gamma #coefficiente di attrito
+    alpha = -(G / l) * math.sin(radianti) - gamma*omega  # accelerazione angolare -> variazione della velocità angolare nel tempo
     omega += alpha * dt  # velocità angolare all'istante dt -> variazione dell'ampiezza angolare nel tempo
     radianti += omega * dt  # ampiezza dell'angolo all'istante dt
-    gradi = int(radianti*57.2958) #conversione da rad a gradi
-    altezza = l*(1 - math.cos(radianti))
+    gradi = int(math.degrees(radianti)) # conversione da rad a gradi
+    altezza = l*(1 - math.cos(radianti)) # altezza della sfera rispetto al punto più basso
     return radianti, omega, gradi, altezza
 # Funzione per prendere in input valori float senza accettare caratteri o valori fuori dal range
 def get_input(prompt: str, min_value: float, max_value: float) -> float:
@@ -30,20 +32,27 @@ l_cm = l*38 #ci sono, di media, circa 38 pixel ogni centimetro
 r = get_input("Inserisci la lunghezza in centimetri del raggio della sfera(tra 0.1 e 2): ", 0.1, 2)  #raggio della sfera
 r_cm = r*38 #conversione da pixel a centimetri
 
-massa = get_input("Inserisci la massa della sfera: ", 0.01, 100)
+massa = get_input("Inserisci la massa della sfera: ", 0.01, 100) #massa della sfera
 G = 9.81  # accelerazione di gravità terrestre in m/s^2 (costante)
-gradi_start = get_input("Inserisci l'ampiezza angolare iniziale in gradi (tra 1 e 179): ", 1, 179)
+gradi_start = get_input("Inserisci l'ampiezza angolare iniziale in gradi (tra 1 e 90): ", 1, 90) #ampiezza iniziale(max 90)
 radianti = math.radians(gradi_start)  # Conversione da gradi a radianti
 omega = 0  # velocità angolare iniziale
 
-#l'utente sceglie quante oscillazioni vedere prima di interrompere il programma
-while True:
-    try:
-        volonta = input("Inserisci quante oscillazioni vedere: ")  # lunghezza del filo in centimetri
-        volonta = int(volonta)  # Prova a convertire l'input in un numero intero
-        break
-    except ValueError:
-        print("Hai inserito un carattere non numerico")
+gamma = get_input("Inserisci il coefficente di attrito(tra 0 e 1): ", 0, 1) #coefficente di attrito
+
+if gamma == 0:
+    #l'utente sceglie quante oscillazioni vedere prima di interrompere il programma
+    while True:
+        try:
+            volonta = input("Inserisci quante oscillazioni vedere: ")  # lunghezza del filo in centimetri
+            volonta = int(volonta)  # Prova a convertire l'input in un numero intero
+            break
+        except ValueError:
+            print("Hai inserito un carattere non numerico")
+else:
+    volonta = 100
+
+I =  massa * l**2 #momento di inerzia del pendolo (considerando nulla la massa del filo)
 
 # Imposta la base e l'altezza della finestra
 h = 700 #altezza finestra
@@ -73,21 +82,23 @@ first_time = pygame.time.get_ticks()
 count = 0 #inizializzo il contatore di oscillazioni
 last_direction = 1  # 1 per destra, -1 per sinistra
 
-#interrompo il codice dopo 10 oscillazioni
-while count <= volonta:
+running = True
 
-    # Calcola la posizione del pendolo
+#interrompo il codice dopo 10 oscillazioni
+while running:
+
+    # Calcola la posizione del pendolo, considerando gli assi cartesiani
     x = b//2 + l_cm * math.sin(radianti) #Posizione della sfera rispetto all'asse delle ascisse
     y = h//4 + l_cm * math.cos(radianti) #Posizione della sfera rispetto all'asse delle ordinate
 
 
     now = pygame.time.get_ticks() #Calcola il tempo trascorso dall'ultimo frame in secondi
-    delta_time = (now - first_time) / 1000.0  # converti in secondi dividendo i millisecondi
+    dt = (now - first_time) / 1000.0  # converti in secondi dividendo i millisecondi
     first_time = now #aggiorno il tempo di riferimento
 
-    dt = delta_time  # tempo trascorso in secondi
     radianti, omega, gradi, altezza = posizione_pendolo(radianti, omega, dt)
-    En_pot = round(massa*G*altezza, 1) #m*g*h ,energia potenziale
+    En_pot = round(massa*G*altezza, 1) #m*g*h ,energia potenziale approssimata
+    En_cin = round(1/2 * I * omega**2, 1) #I/2*omega**2 ,energia cinetica approssimata 
 
 
     #stamperà a schermo L'ampiezza iniziale
@@ -109,11 +120,17 @@ while count <= volonta:
     #stampa a schermo l'energia potenziale
     outputEP = "Energia potenziale: " + str(En_pot) + " J"
     testoEP=stile.render(outputEP, True, white)
+    #stampa a schermo l'energia cinetica
+    outputEK = "Energia cinetica: " + str(En_cin) + " J"
+    testoEK=stile.render(outputEK, True, white)
 
+    #background
     area.fill(black)
+    #linea di confronto
     pygame.draw.line(area, grey, (b//2, h//4), (b//2, h//4 + l_cm - r_cm))#asse delle ordinate
+    #filo del pendolo
     pygame.draw.line(area, green, (b//2, h//4), (int(x), int(y)), 2)#luogo, colore, posizione estremo fisso, posizione estremo mobile
-
+    #sfera
     pygame.draw.circle(area, blue, (int(x), int(y)), r_cm)#luogo, colore, posizione estremo1(x, y), raggio in cm
     
     #blitto il testo sullo schermo prima di aggiornarlo
@@ -123,6 +140,7 @@ while count <= volonta:
     area.blit(testoP, (b/10,h/10 + 40))#sposto questa scritta di 40 pixel sotto l'altra
     area.blit(testoOs, (b/1.5,h/10))#blitto le oscillazioni in alto a destra
     area.blit(testoEP, (b/1.5,h/10 + 20))#blitto energia potenziale in alto a destra
+    area.blit(testoEK, (b/1.5,h/10 + 40))#blitto energia cinetica sotto quella potenziale
     
     pygame.display.update()#aggiorno lo schermo dopo le modifiche grafiche
 
@@ -139,6 +157,11 @@ while count <= volonta:
     events = pygame.event.get()#vengono prese tutte le azioni eseguite in input e memorizzate in questa lista
     for event in events:
         if event.type == pygame.QUIT:#se viene registrato un evento di chiusura forzata
-            pygame.quit() #allora viene interrotto il programma
+            running = False
+    #se il numero di oscillazioni viene superato si ferma il programma
+    if count > volonta:
+        running = False
+
+pygame.quit() #usciti dal ciclo viene interrotto il programma
 
 
