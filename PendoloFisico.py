@@ -5,7 +5,17 @@ pygame.init()#serve per poter utilizzare pygame
 
 
 # Funzione per aggiornare la posizione del pendolo in ogni istante(dt), usando l'equazione di moto del pendolo semplice
-def posizione_pendolo(radianti: float, omega: float, dt: float) -> float:
+def posizione_pendolo(radianti: float, omega: float, dt: float) -> tuple:
+    """
+    Funzione: posizione_pendolo
+    Calcola la posizione, la velocità angolare, l'ampiezza e l'altezza del pendolo.
+    Parametri formali:
+        radianti (float): Angolo in radianti.
+        omega (float): Velocità angolare in radianti.
+        dt (float): Intervallo di tempo in secondi.
+    Valore di ritorno:
+        (radianti, omega, gradi, altezza)
+    """
     alpha = -(G / l) * math.sin(radianti) - gamma*omega  # accelerazione angolare -> variazione della velocità angolare nel tempo
     omega += alpha * dt  # velocità angolare all'istante dt -> variazione dell'ampiezza angolare nel tempo
     radianti += omega * dt  # ampiezza dell'angolo all'istante dt
@@ -13,7 +23,17 @@ def posizione_pendolo(radianti: float, omega: float, dt: float) -> float:
     altezza = l*(1 - math.cos(radianti)) # altezza della sfera rispetto al punto più basso
     return radianti, omega, gradi, altezza
 # Funzione per prendere in input valori float senza accettare caratteri o valori fuori dal range
-def get_input(prompt: str, min_value: float, max_value: float) -> float:
+def get_input(prompt: str, min_value: float, max_value: float):
+    """
+    Funzione: get_input
+    Prende un parametro in input e controlla se risulta valido secondo le regole impostate.
+    Parametri formali:
+        prompt (str): Parametro.
+        min_value (float): Valore minimo nel range della validità.
+        max_value (float): Valore massimo nel range della validità.
+    Valore di ritorno:
+        value
+    """
     while True:
         try:
             value = float(input(prompt))
@@ -25,6 +45,15 @@ def get_input(prompt: str, min_value: float, max_value: float) -> float:
             print("Hai inserito un carattere non numerico")
 # Funzione per prendere in input la massa e ritornare il raggio di una sfera, a seconda del materiale
 def calcola_raggio(massa, densita):
+    """
+    Funzione: calcola_raggio
+    Calcola il raggio di una sfera data la sua massa e densità.
+    Parametri formali:
+        massa (float): La massa della sfera in kg.
+        densita (float): La densità della sfera in kg/m^3.
+    Valore di ritorno:
+        float: Il raggio della sfera in centimetri.
+    """
     # Calcolo del volume dalla massa e dalla densità
     volume = massa / densita
     # Calcolo del raggio dalla formula del volume della sfera
@@ -95,7 +124,6 @@ last_direction = 1  # 1 per destra, -1 per sinistra
 
 running = True
 
-#interrompo il codice dopo 10 oscillazioni
 while running:
 
     # Calcola la posizione del pendolo, considerando gli assi cartesiani
