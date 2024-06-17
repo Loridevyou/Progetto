@@ -6,7 +6,6 @@ pygame.init()#serve per poter utilizzare pygame
 
 # Funzione per aggiornare la posizione del pendolo in ogni istante(dt), usando l'equazione di moto del pendolo semplice
 def posizione_pendolo(radianti: float, omega: float, dt: float) -> float:
-    global gamma #coefficiente di attrito
     alpha = -(G / l) * math.sin(radianti) - gamma*omega  # accelerazione angolare -> variazione della velocità angolare nel tempo
     omega += alpha * dt  # velocità angolare all'istante dt -> variazione dell'ampiezza angolare nel tempo
     radianti += omega * dt  # ampiezza dell'angolo all'istante dt
@@ -24,15 +23,26 @@ def get_input(prompt: str, min_value: float, max_value: float) -> float:
                 print(f"Valore deve essere tra {min_value} e {max_value}")
         except ValueError:
             print("Hai inserito un carattere non numerico")
+# Funzione per prendere in input la massa e ritornare il raggio di una sfera, a seconda del materiale
+def calcola_raggio(massa, densita):
+    # Calcolo del volume dalla massa e dalla densità
+    volume = massa / densita
+    # Calcolo del raggio dalla formula del volume della sfera
+    raggio_m = (3 * volume / (4 * math.pi)) ** (1/3)
+    raggio_cm = raggio_m*100 #conversione da metri a cm
+    return raggio_cm
 
 # Parametri del pendolo
 l = get_input("Inserisci la lunghezza in centimetri del filo (tra 1 e 10): ", 1, 10)  # lunghezza del filo in centimetri 
 l_cm = l*38 #ci sono, di media, circa 38 pixel ogni centimetro
 
-r = get_input("Inserisci la lunghezza in centimetri del raggio della sfera(tra 0.1 e 2): ", 0.1, 2)  #raggio della sfera
-r_cm = r*38 #conversione da pixel a centimetri
+massa = get_input("Inserisci la massa della sfera (kg): ", 0.001, 100) #massa della sfera in kg
 
-massa = get_input("Inserisci la massa della sfera: ", 0.01, 100) #massa della sfera
+dens_ferro = 7870 #densità del ferro in kg/m^3
+
+r = calcola_raggio(massa, dens_ferro)
+r_cm = r*38 #ci sono, di media, circa 38 pixel ogni centimetro
+
 G = 9.81  # accelerazione di gravità terrestre in m/s^2 (costante)
 gradi_start = get_input("Inserisci l'ampiezza angolare iniziale in gradi (tra 1 e 90): ", 1, 90) #ampiezza iniziale(max 90)
 radianti = math.radians(gradi_start)  # Conversione da gradi a radianti
@@ -50,7 +60,7 @@ if gamma == 0:
         except ValueError:
             print("Hai inserito un carattere non numerico")
 else:
-    volonta = 100
+    volonta = 50 #se c'è attrito imposto di default 50 oscillazioni
 
 I =  massa * l**2 #momento di inerzia del pendolo (considerando nulla la massa del filo)
 
@@ -97,7 +107,7 @@ while running:
     first_time = now #aggiorno il tempo di riferimento
 
     radianti, omega, gradi, altezza = posizione_pendolo(radianti, omega, dt)
-    En_pot = round(massa*G*altezza, 1) #m*g*h ,energia potenziale approssimata
+    En_pot = round(massa * G * altezza, 1) #m*g*h ,energia potenziale approssimata
     En_cin = round(1/2 * I * omega**2, 1) #I/2*omega**2 ,energia cinetica approssimata 
 
 
@@ -146,7 +156,10 @@ while running:
 
     # Controlla se il pendolo ha attraversato la posizione iniziale (angolo zero) con cambio di direzione
     if last_direction > 0 and radianti < 0:
+        if count > 0 and gamma != 0:
+            periodo = (now - back)/1000 #calcolo periodo ogni oscillazione
         count += 1
+        back = pygame.time.get_ticks()#aggiorno il tempo per calcolare il periodo
         print(f"\nOscillazione: {count}")
 
     # Aggiorna la direzione
