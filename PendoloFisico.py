@@ -36,12 +36,13 @@ def calcola_raggio(massa, densita):
 l = get_input("Inserisci la lunghezza in centimetri del filo (tra 1 e 10): ", 1, 10)  # lunghezza del filo in centimetri 
 l_cm = l*38 #ci sono, di media, circa 38 pixel ogni centimetro
 
-massa = get_input("Inserisci la massa della sfera (kg): ", 0.001, 100) #massa della sfera in kg
+massa = get_input("Inserisci la massa della sfera di ferro in kg(tra 0.001 e 10): ", 0.001, 10) #massa della sfera in kg
 
 dens_ferro = 7870 #densità del ferro in kg/m^3
 
 r = calcola_raggio(massa, dens_ferro)
 r_cm = r*38 #ci sono, di media, circa 38 pixel ogni centimetro
+print(f"La sfera di ferro con massa {massa}kg ha raggio {round(r, 3)}cm")
 
 G = 9.81  # accelerazione di gravità terrestre in m/s^2 (costante)
 gradi_start = get_input("Inserisci l'ampiezza angolare iniziale in gradi (tra 1 e 90): ", 1, 90) #ampiezza iniziale(max 90)
