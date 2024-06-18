@@ -29,11 +29,15 @@ def esegui_script(script_path):
     else:
         print(f"Errore durante l'esecuzione dello script. Codice di uscita: {exit_status}")
 
-
-scelta = get_input("Scegli se prendere i parametri dal file(1), o inserire da console(0)", 0, 1)
-if scelta == 1:
-    esegui_script('file.py')
-elif scelta == 0:
-    esegui_script('PendoloFisico.py')
-else:
-    print("Errore di inserimento")
+#il programma è in continua esecuzione, l'utente sceglie quando chiuderlo inserendo un valore decimale
+while True:
+    scelta = get_input("\nScegli se prendere i parametri dal file(1), o inserire da console(2).\n(0) per terminare il programma:\n", 0, 2)
+    if scelta == 1:
+        esegui_script('file.py')
+    elif scelta == 2:
+        esegui_script('PendoloFisico.py')
+    elif scelta == 0:
+        print("Programma terminato")
+        break
+    else:
+        print("Valore non valido")

@@ -1,5 +1,5 @@
-lungezza filo(tra uno e dieci)cm: 5
-massa sfera in kg: 0.3 
-angolo(tra zero e novanta)°: 45
-attrito(tra zero e uno): 0
-oscillazioni: 10
+lungezza filo(tra uno e dieci)cm: 10
+massa sfera in kg: 0.1
+angolo(tra zero e novanta)°:2
+attrito(tra zero e uno): 1
+oscillazioni: 2
