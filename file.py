@@ -102,13 +102,14 @@ with open("parametri.txt", "r") as file:
     if gamma is None:
         raise ValueError("Valore attrito non valido")
 
-    volonta = 50 if gamma == 0 else get_input_mod(leggi_numero(linee[4]), 1, 100)
+    #se c'è attrito imposto questa equazione (risultato di varie sperimentazioni), il programma termina circa quando il pendolo si ferma
+    volonta = (1 - gamma)*10 + int(gradi_start/10)-1 if gamma == 0 else get_input_mod(leggi_numero(linee[4]), 1, 100)
     if volonta is None:
         raise ValueError("Valore numero di oscillazioni non valido")
     
 
 # momento di inerzia del pendolo (considerando nulla la massa del filo)
-I = massa * l**2  
+I = massa * l**2 
 
 
 #periodo -> tempo impiegato a compiere un oscillazione completa
