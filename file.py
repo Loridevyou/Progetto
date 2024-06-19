@@ -207,7 +207,6 @@ while running:
             periodo = (now - back)/1000 #calcolo periodo ogni oscillazione
         count += 1
         back = pygame.time.get_ticks()#aggiorno il tempo per calcolare il periodo
-        print(f"\nOscillazione: {count}")
 
     # Aggiorna la direzione
     last_direction = 1 if radianti > 0 else -1
