@@ -65,7 +65,7 @@ def leggi_numero(riga):
         Il numero float estratto dalla riga, oppure None se non viene trovato un numero.
     """
     # Espressione regolare per un numero float
-    numero_regex = r"[+-]?\d+(\.\d+)?" #? significa che l'elemento precedente è opzionale, \d+ significa che c'è un numero decimale con una o più cifre, il \. corrisponde a un punto letterale.
+    numero_regex = r"\d+(\.\d+)?" #? significa che l'elemento precedente è opzionale, \d+ significa che c'è un numero decimale con una o più cifre, il \. corrisponde a un punto letterale.
     match = re.search(numero_regex, riga) #metodo regex per cercare l'elemento, dato dall'espressione regolare, in ogni riga
     if match:
         return float(match.group(0)) #se l'elemento corrisponde ai parametri dell'espressione

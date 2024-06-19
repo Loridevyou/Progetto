@@ -91,10 +91,10 @@ if gamma == 0:
             print("Hai inserito un carattere non numerico")
 else:
     #se c'è attrito imposto questa equazione (risultato di varie sperimentazioni), il programma termina circa quando il pendolo si ferma
-    volonta = (1 - gamma)*10 + int(gradi_start/10)-1
+    volonta = (1 - gamma)*10 + int(gradi_start/10)-3
 if volonta <= 1:
     print("\nIl rapporto tra oscillazione iniziale e attrito non permette al pendolo di fare almeno un oscillazione completa\nIl programma non viene eseguito")
-
+    print("Ti consiglio di provare ad inserire questi valori nel file ed eseguire l'altro programma")
 I =  massa * l**2 #momento di inerzia del pendolo (considerando nulla la massa del filo)
 
 # Imposta la base e l'altezza della finestra

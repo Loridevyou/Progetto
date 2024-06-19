@@ -31,7 +31,7 @@ def esegui_script(script_path):
 
 #il programma è in continua esecuzione, l'utente sceglie quando chiuderlo inserendo un valore decimale
 while True:
-    scelta = get_input("\nScegli se prendere i parametri dal file(1), o inserire da console(2).\n(0) per terminare il programma:\n", 0, 2)
+    scelta = get_input("\nScegli se prendere i parametri dal file(1), o inserire da console(2).\n(0) per terminare il programma: ", 0, 2)
     if scelta == 1:
         esegui_script('file.py')
     elif scelta == 2:
